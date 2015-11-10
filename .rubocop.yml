@@ -1,0 +1,5 @@
+Style/Documentation:
+  Exclude:
+    - lib/ssh_keygen/*.rb
+Metrics/LineLength:
+  Max: 120
