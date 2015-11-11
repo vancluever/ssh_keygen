@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'ssh_keygen/version'
 
 Gem::Specification.new do |spec|
@@ -31,7 +33,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'halite', '~> 1.0'
   spec.add_dependency 'poise', '~> 2.0'
-  spec.add_dependency 'sshkey', '~> 1.7.0'
+  spec.add_dependency 'sshkey', '~> 1.7'
 
   spec.add_development_dependency 'kitchen-rackspace', '~> 0.14'
   spec.add_development_dependency 'poise-boiler', '~> 1.0'

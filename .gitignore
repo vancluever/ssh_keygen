@@ -1,0 +1,14 @@
+# All gem and Halite-related artifacts
+*.gem
+/vendor
+/bin
+.bundle
+/pkg
+Gemfile.lock
+
+# Chef related
+Berksfile.lock
+
+# Vagrant (temp)
+.vagrant
+Vagrantfile

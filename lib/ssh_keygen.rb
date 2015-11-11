@@ -39,12 +39,13 @@ module SSHKeygen
   # provider class for ssh_keygen resource
   class Provider < Chef::Provider
     include Poise
-    include SSHKeygen::Provider
+    include SSHKeygen::SSHKeygenProvider
     provides(:ssh_keygen)
 
     def action_create
+      load_sshkey_gem
       notifying_block do
-        unless File.exist?(@new_resource.path)
+        unless ::File.exist?(@new_resource.path)
           create_key
           save_private_key
           save_public_key
