@@ -43,7 +43,7 @@ module SSHKeygen
     provides(:ssh_keygen)
 
     def action_create
-      load_sshkey_gem
+      # load_sshkey_gem
       notifying_block do
         unless ::File.exist?(@new_resource.path)
           create_key
