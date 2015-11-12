@@ -1,4 +1,4 @@
-require_relative '../spec_helper'
+require 'spec_helper'
 
 describe SSHKeygen::Resource do
   step_into(:ssh_keygen)
