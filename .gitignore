@@ -5,6 +5,7 @@
 .bundle
 /pkg
 Gemfile.lock
+/coverage
 
 # Chef related
 Berksfile.lock

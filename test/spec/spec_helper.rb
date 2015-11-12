@@ -1,7 +1,10 @@
-# require 'chefspec'
-require 'halite/spec_helper'
+require 'poise_boiler/spec_helper'
 require 'ssh_keygen'
 
-RSpec.configure do |config|
-  config.include Halite::SpecHelper
-end
+# require 'chefspec'
+# require 'halite/spec_helper'
+# require 'ssh_keygen'
+
+# RSpec.configure do |config|
+#   config.include Halite::SpecHelper
+# end
