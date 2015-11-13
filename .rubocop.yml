@@ -3,3 +3,5 @@ Style/Documentation:
     - lib/ssh_keygen/*.rb
 Metrics/LineLength:
   Max: 120
+Metrics/AbcSize:
+  Max: 20
