@@ -33,7 +33,7 @@ module SSHKeygen
     attribute(:type, equal_to: ['rsa'], default: 'rsa')
     attribute(:comment, kind_of: String, default: lazy { "#{owner}@#{node['hostname']}" })
     attribute(:passphrase, kind_of: String, default: nil)
-    attribute(:secure_directroy, kind_of: TrueClass, default: false)
+    attribute(:secure_directory, kind_of: TrueClass, default: false)
   end
 
   # provider class for ssh_keygen resource
@@ -50,7 +50,7 @@ module SSHKeygen
           save_private_key
           save_public_key
           update_directory_permissions
-          updated_by_last_action(true)
+          new_resource.updated_by_last_action(true)
         end
       end
     end

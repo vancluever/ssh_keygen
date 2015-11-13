@@ -12,60 +12,95 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'sshkey'
+# TODO: This needs to be refactored using OpenSSH (seen below).
+# Private key - nothing serious to do - need to PEM encode key
+# (with passphrase, if included)
+# Public key - base64 encode correctly based off binary private key
+# possible method: Base64.strict_encode64(key.public_key.n.to_s(2))
+require 'openssl'
 
 module SSHKeygen
-  # provider fucntions for the SSHKeygen Chef resoruce provider class
-  module SSHKeygenProvider
-    def load_sshkey_gem
-      chefgem_context = Chef::RunContext.new(Chef::Node.new, {}, Chef::EventDispatch::Dispatcher.new)
-      chefgem_resource = Chef::Resource::ChefGem.new('sshkey', chefgem_context)
-      chefgem_resource.run_action(:install)
-      require 'sshkey'
+  # Lightweight SSH key generator
+  class Generator
+    attr_reader :private_key, :ssh_public_key
+
+    def initialize(bits, type, passphrase, comment)
+      # set instance attributes
+      @passphrase = passphrase
+      @comment = comment
+      @type = type
+
+      case @type
+      when 'rsa'
+        @key = ::OpenSSL::PKey::RSA.new(bits)
+      else
+        fail "Invalid key type #{new_resource.type}"
+      end
     end
 
+    # return the public key (encrypted if passphrase is given), in PEM form
+    def private_key
+      if @passphrase.to_s.empty?
+        @key.to_pem
+      else
+        cipher = ::OpenSSL::Cipher.new('AES-128-CBC')
+        @key.export(cipher, @passphrase)
+      end
+    end
+
+    # OpenSSH public key
+    def ssh_public_key
+      enc_pubkey = ::Base64.strict_encode64(@key.public_key.n.to_s(2))
+      "ssh-#{@type} #{enc_pubkey} #{@comment}"
+    end
+  end
+
+  # provider fucntions for the SSHKeygen Chef resoruce provider class
+  module SSHKeygenProvider
     def create_key
-      converge_by("Create SSH #{@new_resource.type} #{@new_resource.strength}-bit key (#{@new_resource.comment})") do
-        @key = ::SSHKey.generate(
-          type: @new_resource.type.upcase,
-          bits: @new_resource.strength,
-          comment: @new_resource.comment,
-          passphrase: @new_resource.passphrase
+      converge_by("Create SSH #{new_resource.type} #{new_resource.strength}-bit key (#{new_resource.comment})") do
+        @key = ::SSHKeygen::Generator.new(
+          new_resource.strength,
+          new_resource.type,
+          new_resource.passphrase,
+          new_resource.comment
         )
       end
     end
 
     def save_private_key
-      converge_by("Create SSH private key at #{@new_resource.path}") do
-        file @new_resource.path do
-          action :create
-          owner @new_resource.owner
-          group @new_resource.group
-          content @key.private_key
+      converge_by("Create SSH private key at #{new_resource.path}") do
+        f = file new_resource.path do
+          action :nothing
+          owner new_resource.owner
+          group new_resource.group
           mode 0600
         end
+        f.content(@key.private_key)
+        f.run_action(:create)
       end
     end
 
     def save_public_key
-      converge_by("Create SSH public key at #{@new_resource.path}") do
-        file "#{@new_resource.path}.pub" do
-          action :create
-          owner @new_resource.owner
-          group @new_resource.group
-          content @key.public_key
+      converge_by("Create SSH public key at #{new_resource.path}") do
+        f = file "#{new_resource.path}.pub" do
+          action :nothing
+          owner new_resource.owner
+          group new_resource.group
           mode 0600
         end
+        f.content(@key.ssh_public_key)
+        f.run_action(:create)
       end
     end
 
     def update_directory_permissions
-      return false unless @new_resource.secure_directory
-      converge_by("Update directory permissions at #{File.dirname(@new_resource.path)}") do
-        directory ::File.dirname(@new_resource.path) do
+      return false unless new_resource.secure_directory
+      converge_by("Update directory permissions at #{File.dirname(new_resource.path)}") do
+        directory ::File.dirname(new_resource.path) do
           action :create
-          owner @new_resource.owner
-          group @new_resource.group
+          owner new_resource.owner
+          group new_resource.group
           mode 0700
         end
       end
