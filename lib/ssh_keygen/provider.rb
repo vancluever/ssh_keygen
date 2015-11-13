@@ -12,11 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# TODO: This needs to be refactored using OpenSSH (seen below).
-# Private key - nothing serious to do - need to PEM encode key
-# (with passphrase, if included)
-# Public key - base64 encode correctly based off binary private key
-# possible method: Base64.strict_encode64(key.public_key.n.to_s(2))
 require 'openssl'
 
 module SSHKeygen
