@@ -17,8 +17,8 @@ require 'ssh_keygen'
 
 # a small helper function that creates a SHA1 fingerprint from a private or
 # public key.
-def create_fingerprint_from_key(key)
-  new_key = OpenSSL::PKey::RSA.new(key)
+def create_fingerprint_from_key(key, passphrase = nil)
+  new_key = OpenSSL::PKey::RSA.new(key, passphrase)
   new_key_digest = OpenSSL::Digest::SHA1.new(new_key.public_key.to_der).to_s.scan(/../).join(':')
   new_key_digest
 end
