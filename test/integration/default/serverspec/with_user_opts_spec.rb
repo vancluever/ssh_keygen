@@ -18,7 +18,7 @@ describe file('/home/kitchen/.ssh/id_rsa') do
   it { should exist }
   it { should be_owned_by 'kitchen' }
   it { should be_grouped_into 'kitchen' }
-  it { should be_mode 0600 }
+  it { should be_mode 600 }
 end
 
 # OpenSSL and OpenSSH private keys are the same
@@ -31,13 +31,14 @@ describe file('/home/kitchen/.ssh/id_rsa.pub') do
   it { should exist }
   it { should be_owned_by 'kitchen' }
   it { should be_grouped_into 'kitchen' }
-  it { should be_mode 0600 }
-  its(:content) { should match %r{^ssh-rsa [a-zA-Z0-9=/+]+ root@[-_.a-zA-Z0-9]} }
+  it { should be_mode 600 }
+  its(:content) { should match %r{^ssh-rsa [a-zA-Z0-9=/+]+ kitchen@[-_.a-zA-Z0-9]} }
 end
 
-describe directory('/home/kitchen/.ssh') do
+describe file('/home/kitchen/.ssh') do
   it { should exist }
+  it { should be_directory }
   it { should be_owned_by 'kitchen' }
   it { should be_grouped_into 'kitchen' }
-  it { should be_mode 0700 }
+  it { should be_mode 700 }
 end

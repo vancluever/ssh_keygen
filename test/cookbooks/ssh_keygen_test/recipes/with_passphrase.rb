@@ -12,6 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+directory '/root/.ssh' do
+  action :create
+end
+
 ssh_keygen '/root/.ssh/id_rsa_encrypted' do
   action :create
   passphrase 'onetwothreefour'

@@ -23,6 +23,9 @@ user 'kitchen' do
   manage_home true
 end
 
+directory '/home/kitchen/.ssh' do
+  action :create
+end
 
 ssh_keygen '/home/kitchen/.ssh/id_rsa' do
   action :create
