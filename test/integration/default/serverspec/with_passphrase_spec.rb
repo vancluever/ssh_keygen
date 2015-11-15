@@ -18,12 +18,11 @@ describe file('/root/.ssh/id_rsa_encrypted') do
   it { should exist }
   it { should be_owned_by 'root' }
   it { should be_grouped_into 'root' }
-  it { should be_mode 0600 }
+  it { should be_mode 600 }
 end
 
 # OpenSSL and OpenSSH private keys are the same
 describe x509_private_key('/root/.ssh/id_rsa_encrypted') do
-  it { should be_valid }
   it { should be_encrypted }
 end
 
@@ -31,6 +30,6 @@ describe file('/root/.ssh/id_rsa_encrypted.pub') do
   it { should exist }
   it { should be_owned_by 'root' }
   it { should be_grouped_into 'root' }
-  it { should be_mode 0600 }
+  it { should be_mode 600 }
   its(:content) { should match %r{^ssh-rsa [a-zA-Z0-9=/+]+ root@[-_.a-zA-Z0-9]} }
 end
