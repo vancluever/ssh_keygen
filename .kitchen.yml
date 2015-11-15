@@ -1,0 +1,10 @@
+---
+#<% require 'poise_boiler' %>
+<%= PoiseBoiler.kitchen %>
+
+suites:
+  - name: default
+    run_list:
+      - recipe[ssh_keygen_test::without_passphrase]
+      - recipe[ssh_keygen_test::with_passphrase]
+      - recipe[ssh_keygen_test::with_user_opts]

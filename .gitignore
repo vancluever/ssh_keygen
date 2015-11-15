@@ -9,6 +9,7 @@ Gemfile.lock
 
 # Chef related
 Berksfile.lock
+.kitchen
 
 # Vagrant (temp)
 .vagrant
