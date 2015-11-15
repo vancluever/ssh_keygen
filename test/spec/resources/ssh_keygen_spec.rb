@@ -104,7 +104,7 @@ describe SSHKeygen::Resource do
     recipe do
       ssh_keygen '/root/.ssh/id_rsa_encrypted' do
         action :create
-        passphrase 'ilikerandompasswordsbutthiswilldo'
+        passphrase 'onetwothreefour'
       end
     end
 
