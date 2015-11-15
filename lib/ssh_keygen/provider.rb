@@ -43,8 +43,13 @@ module SSHKeygen
 
     # OpenSSH public key
     def ssh_public_key
-      enc_pubkey = ::Base64.strict_encode64(@key.public_key.n.to_s(2))
+      enc_pubkey = @key.public_key.to_pem.gsub(/(-----(BEGIN|END) PUBLIC KEY-----|\n)/, '')
       "ssh-#{@type} #{enc_pubkey} #{@comment}"
+    end
+
+    # Fingerprint (SHA1 digest, colon delimited)
+    def key_fingerprint
+      OpenSSL::Digest::SHA1.hexdigest(@key.public_key.to_der).scan(/../).join(':')
     end
   end
 
