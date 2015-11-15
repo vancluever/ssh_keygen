@@ -15,7 +15,7 @@
 require 'poise'
 require 'chef/resource'
 require 'chef/provider'
-require 'ssh_keygen/provider.rb'
+require 'ssh_keygen/provider'
 
 # resource and provider classes for the ssh_keygen Chef resource
 module SSHKeygen
