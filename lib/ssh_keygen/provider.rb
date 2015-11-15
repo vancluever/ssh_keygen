@@ -17,8 +17,6 @@ require 'openssl'
 module SSHKeygen
   # Lightweight SSH key generator
   class Generator
-    attr_reader :private_key, :ssh_public_key
-
     def initialize(bits, type, passphrase, comment)
       # set instance attributes
       @passphrase = passphrase
