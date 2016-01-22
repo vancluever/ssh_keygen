@@ -1,3 +1,5 @@
+[![Cookbook Version](https://img.shields.io/cookbook/v/ssh_keygen.svg)](https://supermarket.chef.io/cookbooks/ssh_keygen)
+
 # ssh_keygen Chef Resource
 
 This single-purpose cookbook provides a resource to create SSH keys, as you
