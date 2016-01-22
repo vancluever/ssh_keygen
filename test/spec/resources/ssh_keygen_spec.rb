@@ -73,13 +73,12 @@ describe SSHKeygen::Resource do
       end
     end
 
-    it { is_expected.to create_file('/root/.ssh/id_rsa') }
-
     it 'creates a file at /root/.ssh/id_rsa with the proper permissions' do
       expect(chef_run).to create_file('/root/.ssh/id_rsa').with(
         user:   'root',
         group:  'root',
-        mode:   0600
+        mode:   0600,
+        sensitive: true
       )
     end
 
@@ -87,7 +86,8 @@ describe SSHKeygen::Resource do
       expect(chef_run).to create_file('/root/.ssh/id_rsa.pub').with(
         user:   'root',
         group:  'root',
-        mode:   0600
+        mode:   0600,
+        sensitive: false
       )
     end
 
@@ -112,7 +112,8 @@ describe SSHKeygen::Resource do
       expect(chef_run).to create_file('/root/.ssh/id_rsa_encrypted').with(
         user:   'root',
         group:  'root',
-        mode:   0600
+        mode:   0600,
+        sensitive: true
       )
     end
 
@@ -120,7 +121,8 @@ describe SSHKeygen::Resource do
       expect(chef_run).to create_file('/root/.ssh/id_rsa_encrypted.pub').with(
         user:   'root',
         group:  'root',
-        mode:   0600
+        mode:   0600,
+        sensitive: false
       )
     end
   end

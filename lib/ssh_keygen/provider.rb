@@ -73,6 +73,7 @@ module SSHKeygen
           owner new_resource.owner
           group new_resource.group
           mode 0600
+          sensitive true
         end
         f.content(@key.private_key)
         f.run_action(:create)
