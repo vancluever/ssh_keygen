@@ -13,6 +13,7 @@
 # limitations under the License.
 
 require 'openssl'
+require 'base64'
 
 module SSHKeygen
   # Lightweight SSH key generator
@@ -43,8 +44,25 @@ module SSHKeygen
 
     # OpenSSH public key
     def ssh_public_key
-      enc_pubkey = @key.public_key.to_pem.gsub(/(-----(BEGIN|END) PUBLIC KEY-----|\n)/, '')
-      "ssh-#{@type} #{enc_pubkey} #{@comment}"
+      case @type
+      when 'rsa'
+        enc_pubkey = openssh_rsa_public_key
+      else
+        fail "Invalid key type #{new_resource.type} found in ssh_public_key method - serious error!"
+      end
+      "ssh-#{@type} #{enc_pubkey} #{@comment}\n"
+    end
+
+    # Encode an OpenSSH RSA public key.
+    # Key format is PEM-encoded - size (big-endian), then data:
+    #  * Type (ie: len: 7 (size of string), data: ssh-rsa)
+    #  * Exponent (len/data)
+    #  * Modulus (len+1/NUL+data)
+    def openssh_rsa_public_key
+      enc_type = "#{[7].pack('N')}ssh-rsa"
+      enc_exponent = "#{[@key.public_key.e.num_bytes].pack('N')}#{@key.public_key.e.to_s(2)}"
+      enc_modulus = "#{[@key.public_key.n.num_bytes + 1].pack('N')}\0#{@key.public_key.n.to_s(2)}"
+      Base64.strict_encode64("#{enc_type}#{enc_exponent}#{enc_modulus}")
     end
 
     # Fingerprint (SHA1 digest, colon delimited)
