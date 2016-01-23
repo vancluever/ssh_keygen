@@ -1,4 +1,4 @@
-## v1.0.2
+## v1.0.3
 
 Encode SSH public keys in correct format (OpenSSH format).
 
