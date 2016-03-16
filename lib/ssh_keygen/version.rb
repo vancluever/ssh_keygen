@@ -13,5 +13,5 @@
 # limitations under the License.
 
 module SSHKeygen
-  VERSION = '1.1.0'
+  VERSION = '1.1.1.pre'
 end
