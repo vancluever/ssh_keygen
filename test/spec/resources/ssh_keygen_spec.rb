@@ -63,9 +63,9 @@ describe SSHKeygen::Generator do
 end
 
 describe SSHKeygen::Resource do
-  step_into(:ssh_keygen)
-
   context 'base tests without passphrase' do
+    step_into(:ssh_keygen)
+
     recipe do
       ssh_keygen '/root/.ssh/id_rsa' do
         action :create
@@ -101,6 +101,8 @@ describe SSHKeygen::Resource do
   end
 
   context 'passphrase-specific tests' do
+    step_into(:ssh_keygen)
+
     recipe do
       ssh_keygen '/root/.ssh/id_rsa_encrypted' do
         action :create
@@ -124,6 +126,19 @@ describe SSHKeygen::Resource do
         mode:   0600,
         sensitive: false
       )
+    end
+  end
+
+  context 'ChefSpec matcher test' do
+    recipe do
+      ssh_keygen '/root/.ssh/id_rsa' do
+        action :create
+        secure_directory true
+      end
+    end
+
+    it 'runs ssh_keygen' do
+      expect(chef_run).to create_ssh_keygen('/root/.ssh/id_rsa').with(secure_directory: true)
     end
   end
 end

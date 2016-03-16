@@ -24,6 +24,7 @@ module SSHKeygen
     include Poise
     provides(:ssh_keygen)
     actions(:create)
+    Poise::Helpers::ChefspecMatchers.create_matcher(:ssh_keygen, :create)
 
     attribute(:path, kind_of: String, name_attribute: true)
     attribute(:owner, kind_of: String, default: 'root')
@@ -33,7 +34,7 @@ module SSHKeygen
     attribute(:type, equal_to: ['rsa'], default: 'rsa')
     attribute(:comment, kind_of: String, default: lazy { "#{owner}@#{node['hostname']}" })
     attribute(:passphrase, kind_of: String, default: nil)
-    attribute(:secure_directory, kind_of: TrueClass, default: false)
+    attribute(:secure_directory, kind_of: TrueClass, default: nil)
   end
 
   # provider class for ssh_keygen resource
