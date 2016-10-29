@@ -47,7 +47,7 @@ permissions as well (so mode `0700`).
 
 The attributes for the `ssh_keygen` resource are:
 
- * `action`: Only `:create` is supported.
+ * `action`: Only `:create` is supported. This resource does nothing if the file exists.
  * `path`: The path to save the SSH key to (if different from the resource name).
  * `owner`: The owner of the private and public key files.
  * `group`: The group ID for the private and public key files.
